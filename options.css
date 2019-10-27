@@ -1,0 +1,42 @@
+  #add-button {
+    font-size: 17pt;
+    border: none;
+    padding: 7;
+    background: none;
+    font-weight: bold;
+    color: green;
+  }
+
+  #delete-button {
+    font-size: 13pt;
+    border: none;
+    padding: 7;
+    background: none;
+    font-weight: bold;
+    color: red;
+  }
+
+  table {
+    width:100%;
+  }
+
+  table, th, td {
+    border-collapse: collapse;
+  }
+
+  th {
+    padding: 7px;
+    text-align: center;
+    border-bottom: 2px solid black;
+  }
+
+  td {
+    padding: 11px;
+    text-align: center;
+  }
+
+  tfoot {
+    border-top: 2px solid black;
+    padding: 11px;
+    text-align: center;
+  }

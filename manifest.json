@@ -1,0 +1,30 @@
+{
+  "description": "Scheduled offline mode",
+  "manifest_version": 2,
+  "name": "webRequest-demo",
+  "version": "1.0",
+  "icons": {
+    "48": "icons/ic_alarm_on_48pt.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/ic_alarm_on_green_48pt.png",
+    "default_title": "Beastify"
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "notifications",
+    "<all_urls>",
+    "storage",
+    "webNavigation"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options.html"
+  }
+}
