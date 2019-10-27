@@ -1,14 +1,11 @@
-// TODO fix TypeError: can't access dead object
-// TODO default values of time fields?
-
 const KEY_IN_STORAGE = "timePeriods" // A key to identify the item to be retrieved from storage
 
-function restoreOptions() {
+function updateContent() {
     browser.storage.local.get([KEY_IN_STORAGE]).then(onGot, onError)
 
     function onGot(result) {
         if (result.timePeriods === undefined) return
-        showList(result.timePeriods)
+        fillTable(result.timePeriods)
     }
 }
 
@@ -22,103 +19,60 @@ function saveOptions(e) {
         var endTime = document.querySelector("#end-time").value
         array.push(`${startTime}-${endTime}`)
         browser.storage.local.set({ timePeriods: array })
-        showList(array)
+        fillTable(array)
         notifyBackground()
     }
 }
 
-// TODO rename array 
-function showList(array) {
-    // var table = document.querySelector('#table')
+function fillTable(list) {
     var tbody = document.querySelector('#tbody')
-    // var list = document.querySelector('#list')
-
-    // var t = ""
-
-    // table.innerHTML = ''
     tbody.innerHTML = ''
 
-    for (var i = 0; i < array.length; i++) {
-        var parts = array[i].split('-')
+    for (var i = 0; i < list.length; i++) {
+        var parts = list[i].split('-')
 
+        var startTime = document.createTextNode(parts[0])
+        var endTime = document.createTextNode(parts[1])
+        var deleteButton = createDeleteButton(i)
 
+        var row = makeRow([startTime, endTime, deleteButton])
+        tbody.appendChild(row)
+    }
+
+    function createDeleteButton(index) {
         var button = document.createElement('button')
-
         button.textContent = '⨯'
-        // button.setAttribute('class', 'delete-button')
         button.id = 'delete-button'
-        button.index = i
-        button.addEventListener('click', sf, false)
-        // TODO rename
-        function sf(element) {
-            // console.log(element.target.index)
-            // console.log(element.target)
-            // TODO refactor index
-            // var nodes = Array.from(element.target.closest('tbody').children)
-            // var index = nodes.indexOf(element.target)
-            console.log(element.target.index)
-            array.splice(element.target.index, 1)
-            browser.storage.local.set({
-                timePeriods: array
-            })
-            this.parentElement.parentElement.remove()
-            notifyBackground()
-            restoreOptions()
-
-        }
-
-        var tr = document.createElement('tr');
-
-        var td1 = document.createElement('td');
-        var td2 = document.createElement('td');
-        var td3 = document.createElement('td')
-
-        var text1 = document.createTextNode(parts[0])
-        var text2 = document.createTextNode(parts[1])
-
-        td1.appendChild(text1);
-        td2.appendChild(text2);
-        td3.appendChild(button)
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-        tr.appendChild(td3)
-
-        // table.appendChild(tr);
-        tbody.appendChild(tr)
+        button.index = index
+        button.addEventListener('click', deleteButtonListener, false)
+        return button
     }
 
-
-
-    /* // clear ul
-    list.innerHTML = ""
-    // fill ul by dates and buttons
-    for (var i = 0; i < array.length; i++) {
-        list.innerHTML += '<li name=' + i + '>' + array[i]
-            + '\t<button class="delete-button">⨯</button></li>'
+    function deleteButtonListener() {
+        list.splice(this.index, 1)
+        browser.storage.local.set({
+            timePeriods: list
+        })
+        this.parentElement.parentElement.remove()
+        notifyBackground()
+        updateContent()
     }
 
-    // some magic for add to every button click handler
-    var lis = document.getElementsByTagName('li')
-    for (var i = 0; i < lis.length; i++) {
-        lis[i].firstElementChild.onclick = function () {
-            var nodes = Array.from(this.closest('ul').children)
-            var index = nodes.indexOf(this.parentElement)
-            array.splice(index, 1)
-            browser.storage.local.set({
-                timePeriods: array
-            })
-            this.parentElement.remove()
-            notifyBackground()
-        }
-    } */
+    function makeRow(childs) {
+        var tr = document.createElement('tr')
+        childs.forEach(child => {
+            var td = document.createElement('td')
+            td.appendChild(child)
+            tr.appendChild(td)
+        });
+        return tr
+    }
 }
 
 function notifyBackground() { browser.runtime.sendMessage({}) }
 function onError(e) { console.log(e) }
 
-document.addEventListener("DOMContentLoaded", restoreOptions)
-// document.querySelector("form").addEventListener("submit", saveOptions)
-// document.querySelector("#add-button").addEventListener('click', saveOptions, false)
+document.addEventListener("DOMContentLoaded", updateContent)
 document.getElementById('add-button').addEventListener('click', saveOptions, false)
 
 // set the time in the second field when changing the first

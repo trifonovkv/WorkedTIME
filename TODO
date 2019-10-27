@@ -1,2 +1,4 @@
-add callbacks to buttons
-testing and clean
+name the program
+create description of program
+fix TypeError: can't access dead object
+turn off button in options

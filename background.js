@@ -1,16 +1,13 @@
-// TODO fix when first start ranges undefined
 /* Easily prevent web pages from accessing Internet while your extension still is 
 connected to the web, 
   Блокирует вебзапросы по рассписанию, 
   блокирует запросы к интернет страницам
   отключает браузер от интернета по рассписанию", что бы интернет не отвлекал от работы*/
 // worked time
-// TODO turn off button in options
 
 const ON_ICON_PATH = { path: "icons/ic_alarm_on_green_48pt.png" }
 const OFF_ICON_PATH = { path: "icons/ic_alarm_off_red_48dp.png" }
 const MATCH_ALL_URLS_PATTERN = "*://*/*"  // Match all HTTP, HTTPS and WebSocket URLs
-// TODO notification title and message
 const TITLE_OF_NOTIFICATION = "Offline mode"
 const KEY_IN_STORAGE = "timePeriods" // A key to identify the item to be retrieved from storage
 
