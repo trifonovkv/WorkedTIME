@@ -80,5 +80,4 @@ document.getElementById("start-time").onchange = function () {
     var input = document.getElementById("end-time")
     input.setAttribute("min", this.value)
     input.value = this.value
-    input.stepUp(1)
 }

@@ -1,14 +1,7 @@
-/* Easily prevent web pages from accessing Internet while your extension still is 
-connected to the web, 
-  Блокирует вебзапросы по рассписанию, 
-  блокирует запросы к интернет страницам
-  отключает браузер от интернета по рассписанию", что бы интернет не отвлекал от работы*/
-// worked time
-
 const ON_ICON_PATH = { path: "icons/ic_alarm_on_green_48pt.png" }
 const OFF_ICON_PATH = { path: "icons/ic_alarm_off_red_48dp.png" }
 const MATCH_ALL_URLS_PATTERN = "*://*/*"  // Match all HTTP, HTTPS and WebSocket URLs
-const TITLE_OF_NOTIFICATION = "Offline mode"
+const TITLE_OF_NOTIFICATION = "WorkedTIME"
 const KEY_IN_STORAGE = "timePeriods" // A key to identify the item to be retrieved from storage
 
 var isBlocking = false
@@ -32,7 +25,7 @@ function showNotification(timeRangeString) {
     browser.notifications.create({
         "type": "basic",
         "title": TITLE_OF_NOTIFICATION,
-        "message": `Blocked from ${times[0]} to ${times[1]} by The program`
+        "message": `Offline from ${times[0]} to ${times[1]}`
     });
 }
 
