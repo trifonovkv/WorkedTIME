@@ -7,13 +7,32 @@ const KEY_IN_STORAGE = "timePeriods" // A key to identify the item to be retriev
 var isBlocking = false
 var timePeriod
 
+asyncUpdateBlockingStatus()
+
+function asyncUpdateBlockingStatus() {
+    browser.storage.local.get([KEY_IN_STORAGE]).then(
+        function (result) {
+            timePeriod = getTimePeriodByNowTime(result.timePeriods)
+            isBlocking = timePeriod === undefined ? false : true
+            switchIconTo(!isBlocking)
+        },
+        function (e) {
+            console.log(e)
+        }
+    )
+}
+
 browser.webRequest.onBeforeRequest.addListener(
-    function () { return { cancel: isBlocking } },
+    function () {
+        asyncUpdateBlockingStatus()
+        return { cancel: isBlocking } 
+    },
     { urls: [MATCH_ALL_URLS_PATTERN] },
     ["blocking"] // make the request synchronous, so you can cancel the request
-);
+)
 
 browser.webNavigation.onBeforeNavigate.addListener(function () {
+    asyncUpdateBlockingStatus()
     if (isBlocking) {
         showNotification(timePeriod)
     }
@@ -26,27 +45,11 @@ function showNotification(timeRangeString) {
         "type": "basic",
         "title": TITLE_OF_NOTIFICATION,
         "message": `Offline from ${times[0]} to ${times[1]}`
-    });
+    })
 }
 
 // fired when options changed
-browser.runtime.onMessage.addListener(function () {
-    browser.storage.local.get([KEY_IN_STORAGE]).then(
-        function (result) {
-            timePeriod = getTimePeriodByNowTime(result.timePeriods)
-            if (timePeriod === undefined) {
-                isBlocking = false
-            }
-            else {
-                isBlocking = true
-            }
-            switchIconTo(!isBlocking)
-        },
-        function (e) {
-            console.log(e)
-        }
-    )
-})
+browser.runtime.onMessage.addListener(asyncUpdateBlockingStatus)
 
 function switchIconTo(isOn) {
     browser.browserAction.setIcon(isOn ? ON_ICON_PATH : OFF_ICON_PATH)
