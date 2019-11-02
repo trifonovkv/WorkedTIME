@@ -1,5 +1,3 @@
 fix TypeError: can't access dead object
 turn off button in options
-public on github
-release v0.1
-testing
+create release with binary files
