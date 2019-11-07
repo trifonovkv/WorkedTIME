@@ -1,3 +1,1 @@
-fix TypeError: can't access dead object
-turn off button in options
-create release with binary files
+fix: TypeError: can't access dead object

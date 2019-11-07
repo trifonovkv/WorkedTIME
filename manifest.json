@@ -2,12 +2,12 @@
   "description": "Offline mode by schedule so that the Internet does not distract from work",
   "manifest_version": 2,
   "name": "Worked TIME",
-  "version": "0.5",
+  "version": "1.0",
   "icons": {
-    "48": "icons/ic_alarm_on_48pt.png"
+    "48": "icons/ic_alarm_48px.png"
   },
   "browser_action": {
-    "default_icon": "icons/ic_alarm_on_green_48pt.png",
+    "default_icon": "icons/ic_alarm_48px",
     "default_title": "Worked TIME"
   },
   "permissions": [

@@ -8,8 +8,15 @@
 </head>
 
 <body>
-  <h3 align="center">Offline schedule</h3>
-  <table id="table">
+  <label class="preference-label">Enable
+    <!-- Rounded switch -->
+    <label class="switch">
+      <input type="checkbox" id="enable-switch">
+      <span class="slider round"></span>
+    </label>
+  </label>
+  <label class="preference-label">Offline schedule:</label>
+  <table>
     <thead>
       <tr>
         <th>Start</th>
@@ -23,10 +30,10 @@
     <tfoot>
       <tr>
         <td>
-          <input id="start-time" type="time" name="start-time" value="00:00">
+          <input id="start-time" type="time" value="00:00">
         </td>
         <td>
-          <input id="end-time" type="time" name="end-time" value="00:00">
+          <input id="end-time" type="time" value="00:00">
         </td>
         <td>
           <button id="add-button">🞣</button>

@@ -1,9 +1,8 @@
-const KEY_IN_STORAGE = "timePeriods" // A key to identify the item to be retrieved from storage
-
 function updateContent() {
-    browser.storage.local.get([KEY_IN_STORAGE]).then(onGot, onError)
+    browser.storage.local.get().then(onGot, onError)
 
     function onGot(result) {
+        document.getElementById('enable-switch').checked = result.isEnable === undefined ? true : result.isEnable
         if (result.timePeriods === undefined) return
         fillTable(result.timePeriods)
     }
@@ -11,12 +10,13 @@ function updateContent() {
 
 function saveOptions(e) {
     e.preventDefault()
-    browser.storage.local.get([KEY_IN_STORAGE]).then(onGot, onError)
+    browser.storage.local.set({ isEnable: document.getElementById('enable-switch').checked })
+    browser.storage.local.get().then(onGot, onError)
 
     function onGot(result) {
         var array = result.timePeriods === undefined ? new Array() : result.timePeriods
-        var startTime = document.querySelector("#start-time").value
-        var endTime = document.querySelector("#end-time").value
+        var startTime = document.getElementById('start-time').value
+        var endTime = document.getElementById('end-time').value
         array.push(`${startTime}-${endTime}`)
         browser.storage.local.set({ timePeriods: array })
         fillTable(array)
@@ -25,7 +25,7 @@ function saveOptions(e) {
 }
 
 function fillTable(list) {
-    var tbody = document.querySelector('#tbody')
+    var tbody = document.getElementById('tbody')
     tbody.innerHTML = ''
 
     for (var i = 0; i < list.length; i++) {
@@ -70,14 +70,21 @@ function fillTable(list) {
 }
 
 function notifyBackground() { browser.runtime.sendMessage({}) }
+
 function onError(e) { console.log(e) }
 
-document.addEventListener("DOMContentLoaded", updateContent)
+document.addEventListener('DOMContentLoaded', updateContent)
 document.getElementById('add-button').addEventListener('click', saveOptions, false)
 
 // set the time in the second field when changing the first
-document.getElementById("start-time").onchange = function () {
-    var input = document.getElementById("end-time")
-    input.setAttribute("min", this.value)
+document.getElementById('start-time').onchange = function () {
+    var input = document.getElementById('end-time')
+    input.setAttribute('min', this.value)
     input.value = this.value
 }
+
+var checkbox = document.getElementById('enable-switch')
+checkbox.addEventListener('change', function () {
+    browser.storage.local.set({ isEnable: checkbox.checked })
+    notifyBackground()
+})
